@@ -18,7 +18,7 @@ class ConsentAcceptancesRoute implements JavascriptRouteInterface
 
     public function getJsModule(): string
     {
-        return '/vendor/reno/forms/build/components/forms/ConsentAcceptancesPage.js';
+        return '/js/reno/forms/build/components/forms/ConsentAcceptancesPage.js';
     }
 
     public function getMeta(): array

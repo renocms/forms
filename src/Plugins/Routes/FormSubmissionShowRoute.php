@@ -18,7 +18,7 @@ class FormSubmissionShowRoute implements JavascriptRouteInterface
 
     public function getJsModule(): string
     {
-        return '/vendor/reno/forms/build/components/forms/FormSubmissionShowPage.js';
+        return '/js/reno/forms/build/components/forms/FormSubmissionShowPage.js';
     }
 
     public function getMeta(): array

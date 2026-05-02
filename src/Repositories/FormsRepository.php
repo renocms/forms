@@ -106,7 +106,7 @@ class FormsRepository implements FormsRepositoryInterface
             return self::$rawFormsCache;
         }
 
-        $lock = Cache::lock('forms:sync');
+        $lock = Cache::lock('forms:sync', 30);
 
         if (!$lock->block(5)) {
             throw new \RuntimeException('Forms synchronization is locked');

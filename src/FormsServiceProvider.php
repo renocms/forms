@@ -47,7 +47,7 @@ class FormsServiceProvider extends ServiceProvider
         ], 'forms-migrations');
 
         $this->publishes([
-            __DIR__ . '/../public/build' => public_path('vendor/reno/forms/build'),
+            __DIR__ . '/../public/build' => public_path('js/reno/forms/build'),
         ], 'cms-assets');
 
         $this->registerMenuItems();

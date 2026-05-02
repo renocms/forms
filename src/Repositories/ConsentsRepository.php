@@ -88,7 +88,7 @@ class ConsentsRepository implements ConsentsRepositoryInterface
             return self::$rawConsentsCache;
         }
 
-        $lock = Cache::lock('consents:sync');
+        $lock = Cache::lock('consents:sync', 30);
 
         if (!$lock->block(5)) {
             throw new \RuntimeException('Consents synchronization is locked');

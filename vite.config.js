@@ -8,7 +8,7 @@ const packageDirectory = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig(
     createExtensionConfig({
         packageDirectory,
-        base: '/vendor/reno/forms/build/',
+        base: '/js/reno/forms/build/',
         entryDefinitions: [
             {
                 type: 'file',
