@@ -7,9 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Reno\Cms\Helpers\TablePrefixHelper;
-use Reno\Forms\Interfaces\Forms\FormSubmissionInterface;
 
-class FormSubmission extends Model implements FormSubmissionInterface
+class FormSubmission extends Model
 {
     protected $fillable = [
         'form_id',
@@ -40,6 +39,14 @@ class FormSubmission extends Model implements FormSubmissionInterface
     public function getId(): int
     {
         return (int) $this->getKey();
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getPayload(): array
+    {
+        return is_array($this->payload) ? $this->payload : [];
     }
 
     public function form(): BelongsTo

@@ -3,15 +3,15 @@
 namespace Reno\Forms\Services;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Throwable;
+use Reno\Forms\Jobs\SendFormMailJob;
 use Reno\Forms\Interfaces\Repositories\FormsRepositoryInterface;
 use Reno\Forms\Interfaces\Services\ConsentServiceInterface;
 use Reno\Forms\Interfaces\Services\FormSubmissionContextProviderInterface;
 use Reno\Forms\Models\FormSubmission;
+use Throwable;
 
 class FormSubmissionService
 {
@@ -40,18 +40,20 @@ class FormSubmissionService
         $consents = $formContainer->getConsents();
 
         $consentValidationRules = [];
+        $consentValidationMessages = [];
         foreach ($consents as $consentContainer) {
             if ($consentContainer->getConsent()->isRequired()) {
-                $consentValidationRules['consent.' . $consentContainer->getId()] = ['accepted'];
+                $consentValidationRules['consent' . $consentContainer->getId()] = ['accepted'];
             } else {
-                $consentValidationRules['consent.' . $consentContainer->getId()] = ['nullable', 'boolean'];
+                $consentValidationRules['consent' . $consentContainer->getId()] = ['nullable', 'boolean'];
             }
+            $consentValidationMessages['consent' . $consentContainer->getId()] = $consentContainer->getConsent()->getValidationMessage();
         }
 
         $validation = Validator::make(
             $data,
             array_merge($form->getValidationRules(), $consentValidationRules),
-            $form->getMessages(),
+            array_merge($form->getMessages(), $consentValidationMessages),
             $form->getAttributes(),
         );
 
@@ -82,7 +84,7 @@ class FormSubmissionService
             ]);
 
             foreach ($consents as $consentContainer) {
-                if (!Arr::get($validation->validated(), 'consent.' . $consentContainer->getId())) {
+                if (!Arr::get($validation->validated(), 'consent' . $consentContainer->getId())) {
                     continue;
                 }
 
@@ -97,17 +99,14 @@ class FormSubmissionService
                     $userAgent,
                 );
             }
-
-            $submitHandler = $form->submitUsing($submission, $payload, $request);
-            if (is_callable($submitHandler)) {
-                $submitHandler($submission, $payload, $request);
-            }
         } catch (Throwable $exception) {
             DB::rollBack();
             throw $exception;
         }
 
         DB::commit();
+
+        SendFormMailJob::dispatch($formContainer->getId(), $submission->getId());
 
         $response = response()->json([
             'response' => 'success',

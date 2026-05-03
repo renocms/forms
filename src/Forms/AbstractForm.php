@@ -4,8 +4,10 @@ namespace Reno\Forms\Forms;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Reno\Forms\Interfaces\Forms\FormInterface;
-use Reno\Forms\Interfaces\Forms\FormSubmissionInterface;
+use Reno\Forms\Mail\DefaultMail;
+use Reno\Forms\Models\FormSubmission;
 
 abstract class AbstractForm implements FormInterface
 {
@@ -71,19 +73,23 @@ abstract class AbstractForm implements FormInterface
         return $payload;
     }
 
-    /**
-     * @param array<string, mixed> $payload
-     */
-    public function submitUsing(FormSubmissionInterface $submission, array $payload, Request $request): callable|null
+    public function submitUsing(FormSubmission $submission): callable
     {
-        return null;
+        return function (FormSubmission $submission): void {
+            Mail::send(new DefaultMail($this, $submission));
+        };
     }
 
     /**
      * @param array<string, mixed> $payload
      */
-    public function beforeResponse(JsonResponse $response, FormSubmissionInterface $submission, array $payload, Request $request): JsonResponse
+    public function beforeResponse(JsonResponse $response, FormSubmission $submission, array $payload, Request $request): JsonResponse
     {
         return $response;
+    }
+
+    public function getMailViewName(): ?string
+    {
+        return null;
     }
 }

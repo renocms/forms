@@ -9,4 +9,6 @@ interface ConsentInterface
     public function getText(): string;
 
     public function isRequired(): bool;
+
+    public function getValidationMessage(): string;
 }
