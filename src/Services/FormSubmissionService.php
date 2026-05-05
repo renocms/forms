@@ -5,6 +5,7 @@ namespace Reno\Forms\Services;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Reno\Forms\Events\FormSubmitted;
 use Illuminate\Support\Facades\Validator;
 use Reno\Forms\Jobs\SendFormMailJob;
 use Reno\Forms\Interfaces\Repositories\FormsRepositoryInterface;
@@ -74,6 +75,7 @@ class FormSubmissionService
             $submission = FormSubmission::query()->create([
                 'form_id' => $formContainer->getId(),
                 'user_id' => $userId,
+                'context_id' => Arr::get($context, 'context_id'),
                 'resource_id' => Arr::get($context, 'resource_id'),
                 'payload' => $payload,
                 'name' => Arr::get($payload, 'name'),
@@ -107,6 +109,8 @@ class FormSubmissionService
         DB::commit();
 
         SendFormMailJob::dispatch($formContainer->getId(), $submission->getId());
+
+        event(new FormSubmitted($formContainer, $submission));
 
         $response = response()->json([
             'response' => 'success',

@@ -7,12 +7,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Reno\Cms\Helpers\TablePrefixHelper;
+use Reno\Cms\Models\Context;
 
 class FormSubmission extends Model
 {
     protected $fillable = [
         'form_id',
         'user_id',
+        'context_id',
         'resource_id',
         'payload',
         'name',
@@ -60,6 +62,11 @@ class FormSubmission extends Model
         $userModelClass = (string) config('auth.providers.users.model', \App\Models\User::class);
 
         return $this->belongsTo($userModelClass, 'user_id');
+    }
+
+    public function context(): BelongsTo
+    {
+        return $this->belongsTo(Context::class, 'context_id');
     }
 
     public function consentAcceptances(): HasMany

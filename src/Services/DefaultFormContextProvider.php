@@ -13,6 +13,7 @@ class DefaultFormContextProvider implements FormSubmissionContextProviderInterfa
     public function getContext(): array
     {
         $request = request();
+        $resource = null;
         $resourceId = null;
         if (app()->bound(Resource::class)) {
             $resource = app(Resource::class);
@@ -21,7 +22,21 @@ class DefaultFormContextProvider implements FormSubmissionContextProviderInterfa
             }
         }
 
+        $contextId = $request->attributes->get('cms_context_id');
+        if ((!is_int($contextId) && !is_numeric($contextId)) && app()->bound('cms.current_context_id')) {
+            $contextId = app('cms.current_context_id');
+        }
+
+        if ((!is_int($contextId) && !is_numeric($contextId)) && $resource instanceof Resource) {
+            $contextId = $resource->context_id;
+        }
+
+        if (!is_int($contextId) && !is_numeric($contextId)) {
+            $contextId = null;
+        }
+
         return [
+            'context_id' => $contextId !== null ? (int) $contextId : null,
             'resource_id' => $resourceId,
             'referrer' => $request->headers->get('referer'),
             'url' => $request->fullUrl(),

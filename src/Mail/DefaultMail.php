@@ -18,17 +18,17 @@ class DefaultMail extends Mailable
     {
     }
 
-    protected function getReceiverEmails(): array
+    protected function getRecipientEmails(): array
     {
         return [
-            config('mail.from.address') => config('mail.from.name'),
+            config('mail.from.name') => config('mail.from.address'),
         ];
     }
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            to: $this->getReceiverEmails(),
+            to: $this->getRecipientEmails(),
             subject: $this->form->getTitle(),
         );
     }
@@ -69,7 +69,7 @@ class DefaultMail extends Mailable
 
             $rows[] = [
                 'key' => $key,
-                'label' => $this->resolveFieldLabel($key, $fieldsMapping),
+                'label' => $label,
                 'value' => !empty($value) ? $value : '-',
             ];
         }
