@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Reno\Cms\Events\AdminApiRoutesRegistering;
+use Reno\Cms\Events\JsTranslationFilesRegistering;
 use Reno\Cms\Events\JavascriptRoutesRegistering;
 use Reno\Cms\Events\PermissionsRegistering;
 use Reno\Cms\Events\TopMenuItemsRegistering;
@@ -53,6 +54,7 @@ class FormsServiceProvider extends ServiceProvider
         $this->registerMenuItems();
         $this->registerJavascriptRoutes();
         $this->registerPermissions();
+        $this->registerJsTranslations();
     }
 
     private function registerMenuItems(): void
@@ -97,6 +99,13 @@ class FormsServiceProvider extends ServiceProvider
         Event::listen(PermissionsRegistering::class, function (PermissionsRegistering $event): void {
             $event->addPermission('forms.submissions.view', 'forms');
             $event->addPermission('forms.consents.view', 'forms');
+        });
+    }
+
+    private function registerJsTranslations(): void
+    {
+        Event::listen(JsTranslationFilesRegistering::class, function (JsTranslationFilesRegistering $event): void {
+            $event->addFile(__DIR__ . '/../resources/lang/' . $event->getLocale() . '/forms.php');
         });
     }
 
