@@ -20,4 +20,5 @@ export default {
     forms_form: 'Форма',
     forms_consents: 'Согласия',
     forms_submission_not_found: 'Отправка не найдена',
+    forms_dashboard_recent_submissions: 'Последние заявки',
 };

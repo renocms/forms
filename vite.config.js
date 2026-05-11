@@ -25,6 +25,11 @@ export default defineConfig(
                 name: 'components/forms/ConsentAcceptancesPage',
                 relativePath: 'components/forms/ConsentAcceptancesPage.vue',
             },
+            {
+                type: 'file',
+                name: 'components/dashboard/RecentSubmissionsBlock',
+                relativePath: 'components/dashboard/RecentSubmissionsBlock.vue',
+            },
         ],
         externalizeCmsRuntime: true,
     }),

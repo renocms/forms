@@ -20,4 +20,5 @@ export default {
     forms_form: 'Form',
     forms_consents: 'Consents',
     forms_submission_not_found: 'Submission not found',
+    forms_dashboard_recent_submissions: 'Recent submissions',
 };

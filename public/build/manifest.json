@@ -1,7 +1,16 @@
 {
-  "__plugin-vue_export-helper-D6eEDRMI.js": {
-    "file": "chunks/_plugin-vue_export-helper-D6eEDRMI.js",
+  "__plugin-vue_export-helper-BK05Yq28.js": {
+    "file": "chunks/_plugin-vue_export-helper-BK05Yq28.js",
     "name": "_plugin-vue_export-helper"
+  },
+  "resources/js/components/dashboard/RecentSubmissionsBlock.vue": {
+    "file": "components/dashboard/RecentSubmissionsBlock.js",
+    "name": "components/dashboard/RecentSubmissionsBlock",
+    "src": "resources/js/components/dashboard/RecentSubmissionsBlock.vue",
+    "isEntry": true,
+    "imports": [
+      "__plugin-vue_export-helper-BK05Yq28.js"
+    ]
   },
   "resources/js/components/forms/ConsentAcceptancesPage.vue": {
     "file": "components/forms/ConsentAcceptancesPage.js",
@@ -9,7 +18,7 @@
     "src": "resources/js/components/forms/ConsentAcceptancesPage.vue",
     "isEntry": true,
     "imports": [
-      "__plugin-vue_export-helper-D6eEDRMI.js"
+      "__plugin-vue_export-helper-BK05Yq28.js"
     ]
   },
   "resources/js/components/forms/FormSubmissionShowPage.vue": {
@@ -18,7 +27,7 @@
     "src": "resources/js/components/forms/FormSubmissionShowPage.vue",
     "isEntry": true,
     "imports": [
-      "__plugin-vue_export-helper-D6eEDRMI.js"
+      "__plugin-vue_export-helper-BK05Yq28.js"
     ]
   },
   "resources/js/components/forms/FormSubmissionsListPage.vue": {
@@ -27,7 +36,7 @@
     "src": "resources/js/components/forms/FormSubmissionsListPage.vue",
     "isEntry": true,
     "imports": [
-      "__plugin-vue_export-helper-D6eEDRMI.js"
+      "__plugin-vue_export-helper-BK05Yq28.js"
     ]
   }
 }

@@ -6,10 +6,12 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Reno\Cms\Events\AdminApiRoutesRegistering;
+use Reno\Cms\Events\DashboardBlocksCollecting;
 use Reno\Cms\Events\JsTranslationFilesRegistering;
 use Reno\Cms\Events\JavascriptRoutesRegistering;
 use Reno\Cms\Events\PermissionsRegistering;
 use Reno\Cms\Events\TopMenuItemsRegistering;
+use Reno\Forms\Dashboard\RecentSubmissionsBlock;
 use Reno\Forms\Http\Controllers\Admin\ConsentAcceptanceController;
 use Reno\Forms\Http\Controllers\Admin\FormSubmissionController;
 use Reno\Forms\Plugins\Menu\ConsentAcceptancesMenuItem;
@@ -55,6 +57,7 @@ class FormsServiceProvider extends ServiceProvider
         $this->registerJavascriptRoutes();
         $this->registerPermissions();
         $this->registerJsTranslations();
+        $this->registerDashboardBlocks();
     }
 
     private function registerMenuItems(): void
@@ -106,6 +109,18 @@ class FormsServiceProvider extends ServiceProvider
     {
         Event::listen(JsTranslationFilesRegistering::class, function (JsTranslationFilesRegistering $event): void {
             $event->addFile(__DIR__ . '/../resources/lang/' . $event->getLocale() . '/forms.php');
+        });
+    }
+
+    private function registerDashboardBlocks(): void
+    {
+        Event::listen(DashboardBlocksCollecting::class, function (DashboardBlocksCollecting $event): void {
+            $user = auth()->user();
+            if (!$user || !$user->can('forms.submissions.view')) {
+                //return; // TODO
+            }
+
+            $event->addBlock(new RecentSubmissionsBlock());
         });
     }
 
